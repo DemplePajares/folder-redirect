@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Folder View</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      text-align: center;
+    }
+    .folders {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .folder {
+      width: 120px;
+      margin: 10px;
+      text-align: center;
+      text-decoration: none;
+      color: #333;
+    }
+    .folder img {
+      width: 100px;
+      height: 100px;
+    }
+    .folder:hover {
+      color: #007BFF;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>File Folders</h1>
+    <p>Select a folder to navigate:</p>
+    <div class="folders">
+      <a href="folder1/" class="folder">
+        <img src="https://img.icons8.com/color/100/folder-invoices.png" alt="Folder 1">
+        <p>Folder 1</p>
+      </a>
+      <a href="folder2/" class="folder">
+        <img src="https://img.icons8.com/color/100/folder-invoices.png" alt="Folder 2">
+        <p>Folder 2</p>
+      </a>
+      <a href="folder3/" class="folder">
+        <img src="https://img.icons8.com/color/100/folder-invoices.png" alt="Folder 3">
+        <p>Folder 3</p>
+      </a>
+    </div>
+  </div>
+</body>
+</html>
