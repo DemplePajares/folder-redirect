@@ -1,187 +1,131 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login and Folder Redirection</title>
+    <title>Login & Sign Up</title>
     <style>
-        /* Global Styles */
         body {
+            background-color: yellow;
             font-family: Arial, sans-serif;
-            background-color: #fdf1b3; /* Soft yellow background */
-            color: #333;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .container {
-            background-color: #fff; 
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 350px;
             text-align: center;
         }
-
-        h1 {
-            color: #f39c12; /* Yellow-orange text */
-            margin-bottom: 20px;
-        }
-
-        button {
-            padding: 12px 25px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            background-color: #f39c12; /* Yellow button */
-            color: white;
-            cursor: pointer;
-            margin: 10px;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #e67e22; /* Darker yellow on hover */
-        }
-
-        input {
-            padding: 12px;
-            margin: 10px 0;
-            width: 100%;
-            border-radius: 5px;
+        .form-container {
+            margin: auto;
+            width: 300px;
+            padding: 20px;
             border: 1px solid #ccc;
-            font-size: 16px;
-        }
-
-        .folder-link {
-            display: none;
-            margin-top: 20px;
-        }
-
-        .login-form, .signup-form {
-            display: none;
-            margin-top: 20px;
-        }
-
-        p.error {
-            color: red;
-            font-size: 14px;
+            background: #fff;
             display: none;
         }
-
-        /* For responsive design */
-        @media screen and (max-width: 400px) {
-            .container {
-                width: 90%;
-            }
+        button {
+            background-color: yellow;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Login or Sign Up</h1>
-        <button id="loginBtn">Login</button>
-        <button id="signupBtn">Sign Up</button>
+    <h1>Welcome</h1>
 
-        <!-- Login Form -->
-        <div class="login-form">
-            <h2>Login</h2>
-            <input type="text" id="loginUsername" placeholder="Enter username" required>
-            <input type="password" id="loginPassword" placeholder="Enter password" required>
-            <button onclick="login()">Login</button>
-            <p id="loginError" class="error">Invalid username or password.</p>
-        </div>
+    <!-- Login Form -->
+    <div id="login-form" class="form-container">
+        <h2>Login</h2>
+        <label>Username:</label><br>
+        <input type="text" id="login-username" required><br><br>
+        <label>Password:</label><br>
+        <input type="password" id="login-password" required><br><br>
+        <button onclick="login()">Login</button>
+        <p>Don't have an account? <a href="#" onclick="toggleForms('signup')">Sign Up</a></p>
+    </div>
 
-        <!-- Sign Up Form -->
-        <div class="signup-form">
-            <h2>Sign Up</h2>
-            <input type="text" id="signupUsername" placeholder="Create username" required>
-            <input type="password" id="signupPassword" placeholder="Create password" required>
-            <button onclick="signup()">Sign Up</button>
-        </div>
+    <!-- Signup Form -->
+    <div id="signup-form" class="form-container hidden">
+        <h2>Sign Up</h2>
+        <label>Username:</label><br>
+        <input type="text" id="signup-username" required><br><br>
+        <label>Password:</label><br>
+        <input type="password" id="signup-password" required><br><br>
+        <button onclick="signup()">Sign Up</button>
+        <p>Already have an account? <a href="#" onclick="toggleForms('login')">Login</a></p>
+    </div>
 
-        <!-- Folder Link (Redirection) -->
-        <div class="folder-link" id="folderLink">
-            <h3>Welcome back! Access your folder here:</h3>
-            <a href="" target="_blank" id="folderLinkAnchor" style="color: #f39c12; font-size: 18px; text-decoration: none;">Go to Folder</a>
-        </div>
+    <!-- Welcome Section -->
+    <div id="welcome-section" class="hidden">
+        <h2>Welcome, <span id="welcome-username"></span>!</h2>
+        <p>Your personal folder has been created!</p>
+        <button onclick="logout()">Logout</button>
     </div>
 
     <script>
-        // Elements
-        const loginBtn = document.getElementById('loginBtn');
-        const signupBtn = document.getElementById('signupBtn');
-        const loginForm = document.querySelector('.login-form');
-        const signupForm = document.querySelector('.signup-form');
-        const folderLink = document.getElementById('folderLink');
-        const loginError = document.getElementById('loginError');
-        const folderLinkAnchor = document.getElementById('folderLinkAnchor');
-
-        // Show Login Form
-        loginBtn.addEventListener('click', () => {
-            loginForm.style.display = 'block';
-            signupForm.style.display = 'none';
-        });
-
-        // Show Signup Form
-        signupBtn.addEventListener('click', () => {
-            signupForm.style.display = 'block';
-            loginForm.style.display = 'none';
-        });
-
-        // Handle Login
-        function login() {
-            const username = document.getElementById('loginUsername').value;
-            const password = document.getElementById('loginPassword').value;
-
-            // Get stored data (from localStorage)
-            const storedUser = localStorage.getItem(username);
-
-            if (storedUser && storedUser === password) {
-                localStorage.setItem('loggedIn', 'true');
-                folderLink.style.display = 'block';
-                loginForm.style.display = 'none';
-                loginError.style.display = 'none';
-
-                // Set the folder URL dynamically
-                folderLinkAnchor.href = getFolderURL();
-            } else {
-                loginError.style.display = 'block';
-            }
+        // Toggle between login and signup forms
+        function toggleForms(form) {
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('signup-form').classList.add('hidden');
+            document.getElementById(${form}-form).classList.remove('hidden');
         }
 
-        // Handle Sign Up
+        // Sign Up Function
         function signup() {
-            const username = document.getElementById('signupUsername').value;
-            const password = document.getElementById('signupPassword').value;
+            const username = document.getElementById('signup-username').value;
+            const password = document.getElementById('signup-password').value;
 
-            if (username && password) {
-                localStorage.setItem(username, password);
-                alert('Sign-up successful! Please log in.');
-                signupForm.style.display = 'none';
+            if (localStorage.getItem(username)) {
+                alert('User already exists!');
+                return;
+            }
+
+            localStorage.setItem(username, password);
+            alert('Sign up successful! Please log in.');
+            toggleForms('login');
+        }
+
+        // Login Function
+        function login() {
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+
+            const storedPassword = localStorage.getItem(username);
+
+            if (storedPassword === password) {
+                sessionStorage.setItem('loggedInUser', username);
+                showWelcome(username);
+            } else {
+                alert('Invalid username or password!');
             }
         }
 
-        // Check if the user is logged in
-        if (localStorage.getItem('loggedIn') === 'true') {
-            folderLink.style.display = 'block';
-            // Set the folder URL dynamically if the user is logged in
-            folderLinkAnchor.href = getFolderURL();
+        // Show Welcome Section
+        function showWelcome(username) {
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('signup-form').classList.add('hidden');
+            document.getElementById('welcome-section').classList.remove('hidden');
+            document.getElementById('welcome-username').textContent = username;
         }
 
-        // Function to get the folder URL
-        function getFolderURL() {
-            // Replace with your actual folder URL
-            return "https://www.example.com/folder";  // Replace with your actual folder URL
+        // Logout Function
+        function logout() {
+            sessionStorage.removeItem('loggedInUser');
+            toggleForms('login');
+            document.getElementById('welcome-section').classList.add('hidden');
         }
+
+        // Check if the user is already logged in
+        window.onload = () => {
+            const loggedInUser = sessionStorage.getItem('loggedInUser');
+            if (loggedInUser) {
+                showWelcome(loggedInUser);
+            } else {
+                toggleForms('login');
+            }
+        };
     </script>
 </body>
 </html>
+
 
 
 
