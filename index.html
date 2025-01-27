@@ -5,35 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login and Folder Redirection</title>
     <style>
+        /* Global Styles */
         body {
             font-family: Arial, sans-serif;
+            background-color: #fdf1b3; /* Soft yellow background */
+            color: #333;
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
+            overflow: hidden;
         }
+
         .container {
+            background-color: #fff; 
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 350px;
             text-align: center;
         }
+
+        h1 {
+            color: #f39c12; /* Yellow-orange text */
+            margin-bottom: 20px;
+        }
+
         button {
+            padding: 12px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #f39c12; /* Yellow button */
+            color: white;
+            cursor: pointer;
             margin: 10px;
-            padding: 10px 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #e67e22; /* Darker yellow on hover */
+        }
+
+        input {
+            padding: 12px;
+            margin: 10px 0;
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
             font-size: 16px;
         }
+
         .folder-link {
             display: none;
             margin-top: 20px;
         }
+
         .login-form, .signup-form {
-            margin-top: 20px;
             display: none;
+            margin-top: 20px;
+        }
+
+        p.error {
+            color: red;
+            font-size: 14px;
+            display: none;
+        }
+
+        /* For responsive design */
+        @media screen and (max-width: 400px) {
+            .container {
+                width: 90%;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Welcome! Please log in or sign up</h1>
+        <h1>Login or Sign Up</h1>
         <button id="loginBtn">Login</button>
         <button id="signupBtn">Sign Up</button>
 
@@ -43,7 +94,7 @@
             <input type="text" id="loginUsername" placeholder="Enter username" required>
             <input type="password" id="loginPassword" placeholder="Enter password" required>
             <button onclick="login()">Login</button>
-            <p id="loginError" style="color: red; display: none;">Invalid username or password.</p>
+            <p id="loginError" class="error">Invalid username or password.</p>
         </div>
 
         <!-- Sign Up Form -->
@@ -56,8 +107,8 @@
 
         <!-- Folder Link (Redirection) -->
         <div class="folder-link" id="folderLink">
-            <h3>Welcome back! You can access your folder now:</h3>
-            <a href="" target="_blank" id="folderLinkAnchor">Go to Folder</a>
+            <h3>Welcome back! Access your folder here:</h3>
+            <a href="" target="_blank" id="folderLinkAnchor" style="color: #f39c12; font-size: 18px; text-decoration: none;">Go to Folder</a>
         </div>
     </div>
 
@@ -88,7 +139,7 @@
             const username = document.getElementById('loginUsername').value;
             const password = document.getElementById('loginPassword').value;
 
-            // Get stored data (for example, from localStorage)
+            // Get stored data (from localStorage)
             const storedUser = localStorage.getItem(username);
 
             if (storedUser && storedUser === password) {
@@ -96,7 +147,7 @@
                 folderLink.style.display = 'block';
                 loginForm.style.display = 'none';
                 loginError.style.display = 'none';
-                
+
                 // Set the folder URL dynamically
                 folderLinkAnchor.href = getFolderURL();
             } else {
@@ -123,10 +174,10 @@
             folderLinkAnchor.href = getFolderURL();
         }
 
-        // Example function to get the folder URL (this should point to a valid URL)
+        // Function to get the folder URL
         function getFolderURL() {
             // Replace with your actual folder URL
-            return " https://demplepajares.github.io/folder-redirect";  // This is a placeholder. Replace it with your real URL.
+            return "https://www.example.com/folder";  // Replace with your actual folder URL
         }
     </script>
 </body>
