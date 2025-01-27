@@ -182,6 +182,67 @@ function login() {
   }
 }
 
+// Array to store user data
+const users = [];
+
+// Toggle between Login and Signup forms
+function showLogin() {
+  document.getElementById("loginForm").classList.add("active-form");
+  document.getElementById("signupForm").classList.remove("active-form");
+  document.getElementById("loginTab").classList.add("active-tab");
+  document.getElementById("signupTab").classList.remove("active-tab");
+}
+
+function showSignup() {
+  document.getElementById("signupForm").classList.add("active-form");
+  document.getElementById("loginForm").classList.remove("active-form");
+  document.getElementById("signupTab").classList.add("active-tab");
+  document.getElementById("loginTab").classList.remove("active-tab");
+}
+
+// Signup function
+function signup() {
+  const username = document.getElementById("signupUsername").value.trim();
+  const password = document.getElementById("signupPassword").value.trim();
+
+  if (!username || !password) {
+    alert("Please fill in all fields.");
+    return;
+  }
+
+  const userExists = users.some(user => user.username === username);
+
+  if (userExists) {
+    alert("Username already exists. Please choose another.");
+  } else {
+    users.push({ username, password });
+    alert("Signup successful! You can now log in.");
+    document.getElementById("signupUsername").value = "";
+    document.getElementById("signupPassword").value = "";
+    showLogin();
+  }
+}
+
+// Login function
+function login() {
+  const username = document.getElementById("loginUsername").value.trim();
+  const password = document.getElementById("loginPassword").value.trim();
+
+  if (!username || !password) {
+    alert("Please fill in all fields.");
+    return;
+  }
+
+  const user = users.find(user => user.username === username && user.password === password);
+
+  if (user) {
+    alert("Login successful!");
+    window.location.href = "dashboard/index.html"; // Redirect to the dashboard
+  } else {
+    alert("Invalid username or password.");
+  }
+}
+
 
 
 
