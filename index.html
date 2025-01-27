@@ -91,7 +91,7 @@
             const storedUser = localStorage.getItem(username);
 
             if (storedUser && storedUser === password) {
-                localStorage.setItem('loggedIn', true);
+                localStorage.setItem('loggedIn', 'true');
                 folderLink.style.display = 'block';
                 loginForm.style.display = 'none';
                 loginError.style.display = 'none';
@@ -113,12 +113,20 @@
         }
 
         // Check if the user is logged in
-        if (localStorage.getItem('loggedIn')) {
+        if (localStorage.getItem('loggedIn') === 'true') {
             folderLink.style.display = 'block';
+        }
+
+        // Optional: Add a logout feature to clear session and redirect back to login
+        function logout() {
+            localStorage.removeItem('loggedIn');
+            folderLink.style.display = 'none';
+            alert('Logged out successfully!');
         }
     </script>
 </body>
 </html>
+
 
 
 
