@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,7 +58,7 @@
         <!-- Folder Link (Redirection) -->
         <div class="folder-link" id="folderLink">
             <h3>Welcome back! You can access your folder now:</h3>
-            <a href="YOUR_FOLDER_URL" target="_blank">Go to Folder</a>
+            <a href="" target="_blank" id="folderLinkAnchor">Go to Folder</a>
         </div>
     </div>
 
@@ -69,6 +70,7 @@
         const signupForm = document.querySelector('.signup-form');
         const folderLink = document.getElementById('folderLink');
         const loginError = document.getElementById('loginError');
+        const folderLinkAnchor = document.getElementById('folderLinkAnchor');
 
         // Show Login Form
         loginBtn.addEventListener('click', () => {
@@ -95,6 +97,8 @@
                 folderLink.style.display = 'block';
                 loginForm.style.display = 'none';
                 loginError.style.display = 'none';
+                // Set the folder URL dynamically
+                folderLinkAnchor.href = getFolderURL();
             } else {
                 loginError.style.display = 'block';
             }
@@ -115,13 +119,13 @@
         // Check if the user is logged in
         if (localStorage.getItem('loggedIn') === 'true') {
             folderLink.style.display = 'block';
+            // Set the folder URL dynamically if the user is logged in
+            folderLinkAnchor.href = getFolderURL();
         }
 
-        // Optional: Add a logout feature to clear session and redirect back to login
-        function logout() {
-            localStorage.removeItem('loggedIn');
-            folderLink.style.display = 'none';
-            alert('Logged out successfully!');
+        // Example function to get the folder URL
+        function getFolderURL() {
+            return "https://demplepajares.github.io/folder-redirect/"; // Replace with your actual URL
         }
     </script>
 </body>
