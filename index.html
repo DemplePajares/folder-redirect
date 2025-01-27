@@ -3,287 +3,121 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Folder View with File Preview</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-      color: #333;
-      margin: 0;
-      padding: 0;
-    }
-    .header {
-      width: 100%;
-      padding: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #007BFF;
-      color: #fff;
-      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    .header h1 {
-      margin: 0;
-      padding: 0 20px;
-    }
-    .auth-buttons {
-      padding: 0 20px;
-    }
-    .auth-buttons a {
-      text-decoration: none;
-      color: #fff;
-      margin: 0 10px;
-      padding: 10px 20px;
-      background-color: #333;
-      border-radius: 5px;
-      font-size: 14px;
-      transition: 0.3s;
-    }
-    .auth-buttons a:hover {
-      background-color: #555;
-    }
-    .container {
-      display: none;
-      text-align: center;
-      padding: 20px;
-    }
-    .folders {
-      display: flex;
-      justify-content: center;
-      margin-top: 20px;
-    }
-    .folder {
-      width: 120px;
-      margin: 10px;
-      text-align: center;
-      text-decoration: none;
-      color: #333;
-      cursor: pointer;
-    }
-    .folder img {
-      width: 100px;
-      height: 100px;
-    }
-    .folder:hover {
-      color: #007BFF;
-    }
-    .folder-view {
-      display: none;
-      text-align: center;
-    }
-    .file-list {
-      margin: 20px 0;
-      text-align: left;
-      display: inline-block;
-    }
-    .file-item {
-      margin: 5px 0;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      cursor: pointer;
-      background-color: #fff;
-      transition: background-color 0.3s;
-    }
-    .file-item:hover {
-      background-color: #f7f7f7;
-    }
-    .modal {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #fff;
-      padding: 20px;
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-      z-index: 1000;
-      border-radius: 8px;
-    }
-    .modal h3 {
-      margin: 0 0 10px;
-    }
-    .modal p {
-      white-space: pre-wrap;
-      text-align: left;
-    }
-    .modal .close {
-      background-color: #007BFF;
-      color: #fff;
-      border: none;
-      padding: 10px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .modal .close:hover {
-      background-color: #0056b3;
-    }
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: 999;
-    }
-  </style>
+  <title>Login & Signup</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Header Section -->
-  <div class="header">
-    <h1>File Folders</h1>
-    <div class="auth-buttons">
-      <a href="#" id="login">Login</a>
-      <a href="#" id="signup">Sign Up</a>
+  <div class="container">
+    <div id="login">
+      <h2>Login</h2>
+      <form id="loginForm">
+        <input type="text" id="loginUsername" placeholder="Username" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <button type="button" onclick="login()">Login</button>
+      </form>
+    </div>
+    <div id="signup">
+      <h2>Sign Up</h2>
+      <form id="signupForm">
+        <input type="text" id="signupUsername" placeholder="Username" required>
+        <input type="password" id="signupPassword" placeholder="Password" required>
+        <button type="button" onclick="signup()">Sign Up</button>
+      </form>
     </div>
   </div>
-
-  <!-- Login/Signup Section -->
-  <div id="loginSignup" class="container">
-    <h2>Login / Signup</h2>
-    <form id="authForm">
-      <input type="text" id="username" placeholder="Enter Username" required><br><br>
-      <input type="password" id="password" placeholder="Enter Password" required><br><br>
-      <button type="submit">Submit</button>
-    </form>
-  </div>
-
-  <!-- Folder Content Section -->
-  <div id="folderContainer" class="container">
-    <p>Select a folder to navigate:</p>
-    <div class="folders" id="folders">
-      <div class="folder" data-folder="Folder 1">
-        <img src="https://img.icons8.com/color/100/folder-invoices.png" alt="Folder 1">
-        <p>Folder 1</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Folder View Section -->
-  <div id="folderView" class="folder-view">
-    <h2 id="currentFolderName"></h2>
-    <div class="file-list" id="fileList">
-      <p>No files in this folder.</p>
-    </div>
-    <form id="fileUploadForm" class="file-upload-form">
-      <input type="file" id="fileInput" multiple>
-      <button type="submit">Upload Files</button>
-    </form>
-    <button id="backToFolders">Back to Folders</button>
-  </div>
-
-  <!-- File Preview Modal -->
-  <div class="modal-overlay" id="modalOverlay"></div>
-  <div class="modal" id="fileModal">
-    <h3 id="modalTitle">File Preview</h3>
-    <p id="modalContent"></p>
-    <button class="close" id="closeModal">Close</button>
-  </div>
-
-  <script>
-    // Elements
-    const loginSignup = document.getElementById('loginSignup');
-    const folderContainer = document.getElementById('folderContainer');
-    const folderView = document.getElementById('folderView');
-    const folders = document.querySelectorAll('.folder');
-    const fileList = document.getElementById('fileList');
-    const fileInput = document.getElementById('fileInput');
-    const fileUploadForm = document.getElementById('fileUploadForm');
-    const backToFolders = document.getElementById('backToFolders');
-    const currentFolderName = document.getElementById('currentFolderName');
-    const fileModal = document.getElementById('fileModal');
-    const modalOverlay = document.getElementById('modalOverlay');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalContent = document.getElementById('modalContent');
-    const closeModal = document.getElementById('closeModal');
-
-    // Mock Data
-    const folderData = {
-      "Folder 1": []
-    };
-    let currentFolder = null;
-
-    // Show login/signup first
-    document.addEventListener('DOMContentLoaded', () => {
-      loginSignup.style.display = 'block';
-    });
-
-    // Login/Signup functionality
-    document.getElementById('authForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-      loginSignup.style.display = 'none';
-      folderContainer.style.display = 'block';
-    });
-
-    // Open folder
-    folders.forEach(folder => {
-      folder.addEventListener('click', function () {
-        currentFolder = this.dataset.folder;
-        currentFolderName.textContent = currentFolder;
-        renderFiles();
-        folderContainer.style.display = 'none';
-        folderView.style.display = 'block';
-      });
-    });
-
-    // Back to folders
-    backToFolders.addEventListener('click', function () {
-      folderView.style.display = 'none';
-      folderContainer.style.display = 'block';
-    });
-
-    // Handle file upload
-    fileUploadForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const files = fileInput.files;
-      if (files.length && currentFolder) {
-        Array.from(files).forEach(file => folderData[currentFolder].push(file));
-        renderFiles();
-        fileInput.value = '';
-      }
-    });
-
-    // Render files in the current folder
-    function renderFiles() {
-      fileList.innerHTML = '';
-      const files = folderData[currentFolder];
-      if (files.length === 0) {
-        fileList.innerHTML = '<p>No files in this folder.</p>';
-      } else {
-        files.forEach((file, index) => {
-          const fileDiv = document.createElement('div');
-          fileDiv.classList.add('file-item');
-          fileDiv.textContent = ${index + 1}. ${file.name};
-          fileDiv.addEventListener('click', () => previewFile(file));
-          fileList.appendChild(fileDiv);
-        });
-      }
-    }
-
-    // Preview file content
-    function previewFile(file) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        modalTitle.textContent = file.name;
-        modalContent.textContent = e.target.result;
-        fileModal.style.display = 'block';
-        modalOverlay.style.display = 'block';
-      };
-      reader.readAsText(file);
-    }
-
-    // Close modal
-    closeModal.addEventListener('click', () => {
-      fileModal.style.display = 'none';
-      modalOverlay.style.display = 'none';
-    });
-
-    modalOverlay.addEventListener('click', () => {
-      fileModal.style.display = 'none';
-      modalOverlay.style.display = 'none';
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
+
+
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #f0f0f0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0;
+}
+
+input {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+h2 {
+  margin-bottom: 10px;
+}
+Sent
+
+// Temporary storage for user accounts
+const users = [];
+
+// Signup function
+function signup() {
+  const username = document.getElementById("signupUsername").value;
+  const password = document.getElementById("signupPassword").value;
+
+  // Check if user already exists
+  const userExists = users.some((user) => user.username === username);
+
+  if (userExists) {
+    alert("Username already exists. Please choose a different one.");
+  } else {
+    users.push({ username, password });
+    alert("Signup successful! You can now log in.");
+    document.getElementById("signupForm").reset();
+  }
+}
+
+// Login function
+function login() {
+  const username = document.getElementById("loginUsername").value;
+  const password = document.getElementById("loginPassword").value;
+
+  // Check if the user exists and the password matches
+  const user = users.find((user) => user.username === username && user.password === password);
+
+  if (user) {
+    alert("Login successful!");
+    // Redirect to dashboard
+    window.location.href = "./dashboard/index.html";
+  } else {
+    alert("Invalid username or password. Please try again.");
+  }
+}
+
+
+
+
