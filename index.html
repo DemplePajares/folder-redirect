@@ -1,70 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Folder Redirection</title>
-  <style>
-    body { 
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin-top: 100px;
-      background-color: #f4f4f9;
-    }
-    h1 { 
-      color: #333;
-    }
-    .btn {
-      display: inline-block;
-      margin: 10px;
-      padding: 10px 20px;
-      font-size: 16px;
-      text-decoration: none;
-      color: white;
-      background-color: #007bff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    .btn:hover {
-      background-color: #0056b3;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Folder Redirection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        .folder-link {
+            display: none;
+            margin-top: 20px;
+        }
+        .login-form, .signup-form {
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
 </head>
 <body>
-  <h1>Welcome to My Website</h1>
-  <p>Choose an option to proceed:</p>
-  <a href="login/" class="btn">Login</a>
-  <a href="signup/" class="btn">Sign Up</a>
+    <div class="container">
+        <h1>Welcome! Please log in or sign up</h1>
+        <button id="loginBtn">Login</button>
+        <button id="signupBtn">Sign Up</button>
+
+        <!-- Login Form -->
+        <div class="login-form">
+            <h2>Login</h2>
+            <input type="text" id="loginUsername" placeholder="Enter username" required>
+            <input type="password" id="loginPassword" placeholder="Enter password" required>
+            <button onclick="login()">Login</button>
+            <p id="loginError" style="color: red; display: none;">Invalid username or password.</p>
+        </div>
+
+        <!-- Sign Up Form -->
+        <div class="signup-form">
+            <h2>Sign Up</h2>
+            <input type="text" id="signupUsername" placeholder="Create username" required>
+            <input type="password" id="signupPassword" placeholder="Create password" required>
+            <button onclick="signup()">Sign Up</button>
+        </div>
+
+        <!-- Folder Link (Redirection) -->
+        <div class="folder-link" id="folderLink">
+            <h3>Welcome back! You can access your folder now:</h3>
+            <a href="YOUR_FOLDER_URL" target="_blank">Go to Folder</a>
+        </div>
+    </div>
+
+    <script>
+        // Elements
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const loginForm = document.querySelector('.login-form');
+        const signupForm = document.querySelector('.signup-form');
+        const folderLink = document.getElementById('folderLink');
+        const loginError = document.getElementById('loginError');
+
+        // Show Login Form
+        loginBtn.addEventListener('click', () => {
+            loginForm.style.display = 'block';
+            signupForm.style.display = 'none';
+        });
+
+        // Show Signup Form
+        signupBtn.addEventListener('click', () => {
+            signupForm.style.display = 'block';
+            loginForm.style.display = 'none';
+        });
+
+        // Handle Login
+        function login() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // Get stored data (for example, from localStorage)
+            const storedUser = localStorage.getItem(username);
+
+            if (storedUser && storedUser === password) {
+                localStorage.setItem('loggedIn', true);
+                folderLink.style.display = 'block';
+                loginForm.style.display = 'none';
+                loginError.style.display = 'none';
+            } else {
+                loginError.style.display = 'block';
+            }
+        }
+
+        // Handle Sign Up
+        function signup() {
+            const username = document.getElementById('signupUsername').value;
+            const password = document.getElementById('signupPassword').value;
+
+            if (username && password) {
+                localStorage.setItem(username, password);
+                alert('Sign-up successful! Please log in.');
+                signupForm.style.display = 'none';
+            }
+        }
+
+        // Check if the user is logged in
+        if (localStorage.getItem('loggedIn')) {
+            folderLink.style.display = 'block';
+        }
+    </script>
 </body>
 </html>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-</head>
-<body>
-  <h1>Login Page</h1>
-  <p>Welcome to the login page.</p>
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-</head>
-<body>
-  <h1>Login Page</h1>
-  <p>Welcome to the login page.</p>
-</body>
-</html>
 
 
 
